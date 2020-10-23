@@ -1,0 +1,80 @@
+#+TITLE: High-res tab-line icons
+
+[[./tab-line.png]]
+
+* Copy image files to ~image-load-path~
+
+#+begin_src shell
+git clone https://github.com/casouri/highres-tab-line.git
+cd highres-tab-line
+mkdir -p ~/.emacs.d/etc/images/
+cp *.xpm ~/.emacs.d/etc/images
+#+end_src
+
+#+begin_src emacs-lisp
+(push "~/.emacs.d/etc/images/" image-load-path)
+#+end_src
+
+* Setup
+
+Update relevant variables. The difference is in the file name and scale.
+
+#+begin_src emacs-lisp
+(setq tab-line-new-button
+      (propertize " + "
+                  'display `(image :type xpm
+                                   :file ,(image-search-load-path
+                                           "new@2x.xpm")
+                                   :margin (2 . 0)
+                                   :ascent center
+                                   :scale 0.5)
+                  'keymap tab-line-add-map
+                  'mouse-face 'tab-line-highlight
+                  'help-echo "Click to add tab"))
+
+(setq tab-line-close-button
+      (propertize " x"
+                  'display `(image :type xpm
+                                   :file ,(image-search-load-path
+                                           "close@2x.xpm")
+                                   :margin (2 . 0)
+                                   :ascent center
+                                   :scale 0.5)
+                  'keymap tab-line-tab-close-map
+                  'mouse-face 'tab-line-close-highlight
+                  'help-echo "Click to close tab"))
+
+(setq tab-line-left-button
+      (propertize " <"
+                  'display `(image :type xpm
+                                   :file ,(image-search-load-path
+                                           "left-arrow@2x.xpm")
+                                   :margin (2 . 0)
+                                   :ascent center
+                                   :scale 0.5)
+                  'keymap tab-line-left-map
+                  'mouse-face 'tab-line-highlight
+                  'help-echo "Click to scroll left"))
+
+(setq tab-line-right-button
+      (propertize "> "
+                  'display `(image :type xpm
+                                   :file ,(image-search-load-path
+                                           "right-arrow@2x.xpm")
+                                   :margin (2 . 0)
+                                   :ascent center
+                                   :scale 0.5)
+                  'keymap tab-line-right-map
+                  'mouse-face 'tab-line-highlight
+                  'help-echo "Click to scroll right"))
+#+end_src
+
+* Extra
+
+This adds padding around buffer names in the tab.
+
+#+begin_src emacs-lisp
+(setq tab-line-tab-name-function
+      (lambda (buffer &optional _)
+        (format " %s " (buffer-name buffer))))
+#+end_src
